@@ -90,6 +90,7 @@ namespace Sass {
     // Regex equivalent: /(?:x)/
     template <char chr>
     const char* exactly(const char* src) {
+      if (src == NULL) return 0;
       return *src == chr ? src + 1 : 0;
     }
 
@@ -102,7 +103,7 @@ namespace Sass {
       if (src == NULL) return 0;
       // there is a small chance that the search string
       // is longer than the rest of the string to look at
-      while (*pre && *src == *pre) {
+      while (*src && *pre && *src == *pre) {
         ++src, ++pre;
       }
       // did the matcher finish?
@@ -115,6 +116,7 @@ namespace Sass {
     // only define lower case alpha chars
     template <char chr>
     const char* insensitive(const char* src) {
+      if (src == NULL) return 0;
       return *src == chr || *src+32 == chr ? src + 1 : 0;
     }
 
@@ -128,7 +130,7 @@ namespace Sass {
       if (src == NULL) return 0;
       // there is a small chance that the search string
       // is longer than the rest of the string to look at
-      while (*pre && (*src == *pre || *src+32 == *pre)) {
+      while (*src && *pre && (*src == *pre || *src+32 == *pre)) {
         ++src, ++pre;
       }
       // did the matcher finish?
@@ -157,7 +159,7 @@ namespace Sass {
     // Regex equivalent: /[^axy]/
     template <const char* neg_char_class>
     const char* neg_class_char(const char* src) {
-      if (*src == 0) return 0;
+      if (src == NULL) return 0;
       const char* cc = neg_char_class;
       while (*cc && *src != *cc) ++cc;
       return *cc ? 0 : src + 1;
@@ -176,7 +178,8 @@ namespace Sass {
     // Regex equivalent: /[^x]/
     template <const char chr>
     const char* any_char_but(const char* src) {
-      return (*src && *src != chr) ? src + 1 : 0;
+      if (src == NULL) return 0;
+      return *src != chr ? src + 1 : 0;
     }
 
     // Succeeds if the matcher fails.
